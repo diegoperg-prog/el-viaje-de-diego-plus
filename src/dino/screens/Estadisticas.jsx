@@ -17,48 +17,61 @@ export default function Estadisticas({ historial = [], onBack }) {
 
   // --- Datos del gráfico XP diario ---
   const data = useMemo(() => {
-    if (historial.length > 0) {
-      return historial
-        .slice(-7)
-        .map((d) => ({
-          fecha: new Date(d.fecha).toLocaleDateString("es-UY", {
-            weekday: "short",
-          }),
-          xp: d.xp,
-        }));
+    const registros = historial
+      .slice(-7)
+      .map((d) => ({
+        fecha: new Date(d.fecha).toLocaleDateString("es-UY", {
+          weekday: "short",
+        }),
+        xp: d.xp,
+      }));
+
+    if (registros.length === 0) {
+      // Datos simulados para que no se vea vacío
+      return [
+        { fecha: "Lun", xp: 30 },
+        { fecha: "Mar", xp: 45 },
+        { fecha: "Mié", xp: 20 },
+        { fecha: "Jue", xp: 55 },
+        { fecha: "Vie", xp: 40 },
+        { fecha: "Sáb", xp: 70 },
+        { fecha: "Dom", xp: 65 },
+      ];
     }
-    // Datos de ejemplo si aún no hay historial
-    return [
-      { fecha: "Lun", xp: 30 },
-      { fecha: "Mar", xp: 45 },
-      { fecha: "Mié", xp: 20 },
-      { fecha: "Jue", xp: 55 },
-      { fecha: "Vie", xp: 40 },
-      { fecha: "Sáb", xp: 70 },
-      { fecha: "Dom", xp: 65 },
-    ];
+
+    return registros;
   }, [historial]);
 
-  // --- Totales e información derivada ---
   const totalXP = data.reduce((acc, d) => acc + d.xp, 0);
   const promedio = (totalXP / data.length).toFixed(1);
   const maxDia = data.reduce((a, b) => (a.xp > b.xp ? a : b), data[0]);
   const minDia = data.reduce((a, b) => (a.xp < b.xp ? a : b), data[0]);
 
   // --- Ranking de hábitos ---
-  const habitosGuardados = JSON.parse(
-    localStorage.getItem("habitos_registrados") || "[]"
-  );
-  const ranking = Object.values(
-    habitosGuardados.reduce((acc, h) => {
-      acc[h.nombre] = acc[h.nombre] || { nombre: h.nombre, veces: 0, xp: 0 };
-      acc[h.nombre].veces += 1;
-      acc[h.nombre].xp += h.xp;
-      return acc;
-    }, {})
-  )
-    .sort((a, b) => b.veces - a.veces)
-    .slice(0, 3);
+  const habitosGuardadosRaw = localStorage.getItem("habitos_registrados");
+  let habitosGuardados = [];
+
+  try {
+    habitosGuardados = habitosGuardadosRaw
+      ? JSON.parse(habitosGuardadosRaw)
+      : [];
+  } catch {
+    habitosGuardados = [];
+  }
+
+  const ranking =
+    habitosGuardados.length > 0
+      ? Object.values(
+          habitosGuardados.reduce((acc, h) => {
+            acc[h.nombre] = acc[h.nombre] || { nombre: h.nombre, veces: 0, xp: 0 };
+            acc[h.nombre].veces += 1;
+            acc[h.nombre].xp += h.xp;
+            return acc;
+          }, {})
+        )
+          .sort((a, b) => b.veces - a.veces)
+          .slice(0, 3)
+      : [];
 
   const habitoFuerte = ranking[0]?.nombre || "Ninguno";
   const habitoDebil = ranking[ranking.length - 1]?.nombre || "Ninguno";
