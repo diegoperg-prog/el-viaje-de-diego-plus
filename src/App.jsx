@@ -44,11 +44,15 @@ export default function App() {
   }, []);
 
   // --- Nivel y XP ---
-  const nivel = Math.floor(puntos / 1000) + 1;
-  const nivelActual = Math.min(6, nivel);
-  const xpNivel = puntos % 1000;
-  const xpRatio = xpNivel / 1000;
-  const currentLevel = levels[nivelActual - 1];
+const nivel = Math.floor(puntos / 1000) + 1;
+const nivelActual = nivel > levels.length ? levels.length : nivel;
+const xpNivel = puntos % 1000;
+const xpRatio = xpNivel / 1000;
+const currentLevel = levels[nivelActual - 1] || {
+  bg: "/assets/backgrounds/bg_bosque.png",
+  name: "Bosque Místico",
+  to: "#4B7F52"
+};
 
   // --- Mensaje motivacional ---
   useEffect(() => {
