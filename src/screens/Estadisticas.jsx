@@ -12,40 +12,69 @@ import BackButton from "../dino/components/BackButton";
 import levels from "../dino/theme/levels";
 import Card from "../dino/components/Card";
 
-/**
- * 📊 Estadísticas del héroe
- * Muestra la evolución XP diaria y base para futuros insights.
- */
 export default function Estadisticas({ historial = [], onBack }) {
   const currentLevel = levels[0];
 
-  // Datos simulados o reales desde historial
+  // --- Datos del gráfico XP diario ---
   const data = useMemo(() => {
-    if (historial.length > 0) {
-      return historial
-        .slice(-7)
-        .map((d) => ({
-          fecha: new Date(d.fecha).toLocaleDateString("es-UY", {
-            weekday: "short",
-          }),
-          xp: d.xp,
-        }));
+    const registros = historial
+      .slice(-7)
+      .map((d) => ({
+        fecha: new Date(d.fecha).toLocaleDateString("es-UY", {
+          weekday: "short",
+        }),
+        xp: d.xp,
+      }));
+
+    if (registros.length === 0) {
+      // Datos simulados para que no se vea vacío
+      return [
+        { fecha: "Lun", xp: 30 },
+        { fecha: "Mar", xp: 45 },
+        { fecha: "Mié", xp: 20 },
+        { fecha: "Jue", xp: 55 },
+        { fecha: "Vie", xp: 40 },
+        { fecha: "Sáb", xp: 70 },
+        { fecha: "Dom", xp: 65 },
+      ];
     }
-    // Datos mock si aún no hay historial
-    return [
-      { fecha: "Lun", xp: 30 },
-      { fecha: "Mar", xp: 45 },
-      { fecha: "Mié", xp: 20 },
-      { fecha: "Jue", xp: 55 },
-      { fecha: "Vie", xp: 40 },
-      { fecha: "Sáb", xp: 70 },
-      { fecha: "Dom", xp: 65 },
-    ];
+
+    return registros;
   }, [historial]);
 
-  // Calcular total y promedio
   const totalXP = data.reduce((acc, d) => acc + d.xp, 0);
   const promedio = (totalXP / data.length).toFixed(1);
+  const maxDia = data.reduce((a, b) => (a.xp > b.xp ? a : b), data[0]);
+  const minDia = data.reduce((a, b) => (a.xp < b.xp ? a : b), data[0]);
+
+  // --- Ranking de hábitos ---
+  const habitosGuardadosRaw = localStorage.getItem("habitos_registrados");
+  let habitosGuardados = [];
+
+  try {
+    habitosGuardados = habitosGuardadosRaw
+      ? JSON.parse(habitosGuardadosRaw)
+      : [];
+  } catch {
+    habitosGuardados = [];
+  }
+
+  const ranking =
+    habitosGuardados.length > 0
+      ? Object.values(
+          habitosGuardados.reduce((acc, h) => {
+            acc[h.nombre] = acc[h.nombre] || { nombre: h.nombre, veces: 0, xp: 0 };
+            acc[h.nombre].veces += 1;
+            acc[h.nombre].xp += h.xp;
+            return acc;
+          }, {})
+        )
+          .sort((a, b) => b.veces - a.veces)
+          .slice(0, 3)
+      : [];
+
+  const habitoFuerte = ranking[0]?.nombre || "Ninguno";
+  const habitoDebil = ranking[ranking.length - 1]?.nombre || "Ninguno";
 
   return (
     <section
@@ -77,10 +106,10 @@ export default function Estadisticas({ historial = [], onBack }) {
           marginBottom: "16px",
         }}
       >
-        Evolución de XP en los últimos 7 días
+        Evolución XP — Últimos 7 días
       </p>
 
-      {/* Gráfico */}
+      {/* 📈 Gráfico */}
       <div
         style={{
           width: "90%",
@@ -103,15 +132,10 @@ export default function Estadisticas({ historial = [], onBack }) {
               axisLine={{ stroke: "#E3C06E" }}
               tickLine={false}
             />
-            <YAxis
-              hide
-              domain={[0, "dataMax + 20"]}
-              axisLine={false}
-              tickLine={false}
-            />
+            <YAxis hide domain={[0, "dataMax + 20"]} />
             <Tooltip
               contentStyle={{
-                background: "rgba(0,0,0,0.8)",
+                background: "rgba(0,0,0,0.85)",
                 border: "1px solid #E3C06E",
                 borderRadius: 6,
                 color: "#FAE6B1",
@@ -124,23 +148,40 @@ export default function Estadisticas({ historial = [], onBack }) {
               stroke="#E3C06E"
               strokeWidth={3}
               dot={{ fill: "#9AC27B", stroke: "#E3C06E", strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: "#FFF", strokeWidth: 1 }}
             />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Resumen */}
+      {/* 📊 Ranking de hábitos */}
       <Card style={{ width: 320, margin: "0 auto 20px" }}>
-        <p style={{ fontFamily: "Cinzel", fontSize: "1.1rem", marginBottom: 4 }}>
-          Total XP semanal: <span style={{ color: "#9AFF84" }}>{totalXP}</span>
+        <p style={{ fontFamily: "Cinzel", marginBottom: 6, color: "#E3C06E" }}>
+          🧾 Hábitos más recurrentes
         </p>
-        <p style={{ fontFamily: "EB Garamond", fontSize: "1rem" }}>
-          Promedio diario: {promedio} XP
-        </p>
+        {ranking.length > 0 ? (
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              fontFamily: "EB Garamond",
+              fontSize: "0.95rem",
+              color: "#FAE6B1",
+            }}
+          >
+            {ranking.map((h, i) => (
+              <li key={i} style={{ marginBottom: 4 }}>
+                {i + 1}. {h.nombre} — {h.veces} veces ({h.xp} XP)
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p style={{ fontSize: "0.9rem", color: "#ccc" }}>
+            Aún no completaste hábitos.
+          </p>
+        )}
       </Card>
 
-      {/* Próximos módulos */}
+      {/* 💬 Insights del sabio */}
       <Card
         style={{
           width: 320,
