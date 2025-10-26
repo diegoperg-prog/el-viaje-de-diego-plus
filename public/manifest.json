@@ -1,1 +1,16 @@
+{
+  "name": "El viaje de Diego+",
+  "short_name": "Diego+",
+  "description": "App de progreso personal gamificada — cada hábito suma experiencia.",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": ".",
+  "background_color": "#F2F2F7",
+  "theme_color": "#3E7C59",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
 
