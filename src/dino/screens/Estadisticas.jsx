@@ -27,7 +27,6 @@ export default function Estadisticas({ historial = [], onBack }) {
           xp: d.xp,
         }));
     }
-    // Datos de ejemplo si aún no hay historial
     return [
       { fecha: "Lun", xp: 30 },
       { fecha: "Mar", xp: 45 },
@@ -49,6 +48,7 @@ export default function Estadisticas({ historial = [], onBack }) {
   const habitosGuardados = JSON.parse(
     localStorage.getItem("habitos_registrados") || "[]"
   );
+
   const ranking = Object.values(
     habitosGuardados.reduce((acc, h) => {
       acc[h.nombre] = acc[h.nombre] || { nombre: h.nombre, veces: 0, xp: 0 };
