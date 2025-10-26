@@ -4,7 +4,7 @@ import XPBar from "./dino/components/XPBar";
 import Particles from "./dino/components/Particles";
 import TransitionView from "./dino/components/TransitionView";
 
-// Pantallas separadas
+// Pantallas
 import Habitos from "./screens/Habitos";
 import Estadisticas from "./screens/Estadisticas";
 import Viaje from "./screens/Viaje";
@@ -20,7 +20,7 @@ export default function App() {
   const [mensajeDiario, setMensajeDiario] = useState("");
   const [historial, setHistorial] = useState([]);
 
-  // --- Cargar datos iniciales ---
+  // --- Carga inicial ---
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("camino_diego_data") || "{}");
     if (stored.puntos) setPuntos(stored.puntos);
@@ -28,7 +28,7 @@ export default function App() {
     if (stored.historial) setHistorial(stored.historial);
   }, []);
 
-  // --- Guardar automáticamente ---
+  // --- Guardado automático ---
   useEffect(() => {
     localStorage.setItem(
       "camino_diego_data",
@@ -39,7 +39,7 @@ export default function App() {
   // --- Fecha actual ---
   useEffect(() => {
     const hoy = new Date();
-    const fecha = hoy.toISOString().split("T")[0]; // YYYY-MM-DD
+    const fecha = hoy.toISOString().split("T")[0];
     setFechaHoy(fecha);
   }, []);
 
@@ -50,7 +50,7 @@ export default function App() {
   const xpRatio = xpNivel / 1000;
   const currentLevel = levels[nivelActual - 1];
 
-  // --- Mensaje diario ---
+  // --- Mensaje motivacional ---
   useEffect(() => {
     const frases = [
       "Cada paso deja una huella ⚡",
@@ -61,7 +61,7 @@ export default function App() {
     setMensajeDiario(frases[Math.floor(Math.random() * frases.length)]);
   }, [nivelActual]);
 
-  // --- Manejar registro XP diario ---
+  // --- Registro de XP diario ---
   const registrarXP = (valor) => {
     const hoy = new Date().toISOString().split("T")[0];
     setHistorial((prev) => {
@@ -76,20 +76,20 @@ export default function App() {
     });
   };
 
-  // --- Enviar funciones a pantallas ---
+  // --- Agregar XP global ---
   const handleAddXP = (valor) => {
     setPuntos((prev) => prev + valor);
     registrarXP(valor);
   };
 
-  // --- Render de pantallas ---
+  // --- Render dinámico de pantallas ---
   const renderPantalla = () => {
     switch (pantalla) {
       case "habitos":
         return (
           <Habitos
             puntos={puntos}
-            setPuntos={handleAddXP}
+            setPuntos={handleAddXP} // ✅ Corregido (sin paréntesis)
             onBack={() => setPantalla("home")}
           />
         );
@@ -112,20 +112,22 @@ export default function App() {
               backgroundImage: `url(${currentLevel.bg})`,
             }}
           >
-            {/* HUD Superior */}
+            {/* HUD superior */}
             <div className="hud">
               <div className="hud-points">
                 <span className="points">{puntos}</span>
                 <span className="level">LVL {nivelActual}</span>
               </div>
-              <div className="hud-subtext">puntos hoy</div>
+              <div className="hud-subtext">PUNTOS HOY</div>
+
               <div className="xp-bar-frame">
                 <div
                   className="xp-bar-fill"
                   style={{ width: `${xpRatio * 100}%` }}
                 ></div>
               </div>
-              <div className="hud-subtext">70 puntos esta semana</div>
+
+              <div className="hud-subtext">70 PUNTOS ESTA SEMANA</div>
             </div>
 
             {/* Héroe */}
@@ -134,6 +136,11 @@ export default function App() {
                 src="/assets/character/hero.gif"
                 alt="El héroe"
                 draggable="false"
+                style={{
+                  width: "35vw",
+                  maxWidth: "160px",
+                  filter: "drop-shadow(0 4px 4px rgba(0,0,0,0.7))",
+                }}
               />
               <div className="hero-name">Diego, el Héroe</div>
             </div>
@@ -146,19 +153,13 @@ export default function App() {
               <button className="btn-medieval" onClick={() => setPantalla("habitos")}>
                 Hábitos
               </button>
-              <button
-                className="btn-medieval"
-                onClick={() => setPantalla("estadisticas")}
-              >
+              <button className="btn-medieval" onClick={() => setPantalla("estadisticas")}>
                 Estadísticas
               </button>
               <button className="btn-medieval" onClick={() => setPantalla("viaje")}>
                 Viaje
               </button>
-              <button
-                className="btn-medieval"
-                onClick={() => setPantalla("recompensa")}
-              >
+              <button className="btn-medieval" onClick={() => setPantalla("recompensa")}>
                 Recompensa
               </button>
             </div>
@@ -179,9 +180,5 @@ export default function App() {
     }
   };
 
-  return (
-    <TransitionView keyProp={pantalla}>
-      {renderPantalla()}
-    </TransitionView>
-  );
+  return <TransitionView keyProp={pantalla}>{renderPantalla()}</TransitionView>;
 }
