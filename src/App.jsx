@@ -122,8 +122,8 @@ export default function App() {
 <div
   style={{
     position: "relative",
-    width: "70vw",
-    maxWidth: 360,
+    width: "35vw",
+    maxWidth: 180,
     aspectRatio: "2480 / 2431",
     backgroundImage: "url('/assets/character/hero.gif')",
     backgroundSize: "contain",
