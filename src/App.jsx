@@ -12,11 +12,7 @@ import Recompensa from "./screens/Recompensa";
 
 import "./App.css";
 
-// ======================================================
-// ⚔️ El viaje de Diego+ — App.jsx (estética medieval)
-// ======================================================
 export default function App() {
-  // --- Estado base ---
   const [pantalla, setPantalla] = useState("home");
   const [puntos, setPuntos] = useState(0);
   const [racha, setRacha] = useState(22);
@@ -24,7 +20,7 @@ export default function App() {
   const [mensajeDiario, setMensajeDiario] = useState("");
   const [historial, setHistorial] = useState([]);
 
-  // --- Carga inicial ---
+  // --- Cargar datos iniciales ---
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("camino_diego_data") || "{}");
     if (stored.puntos) setPuntos(stored.puntos);
@@ -32,7 +28,7 @@ export default function App() {
     if (stored.historial) setHistorial(stored.historial);
   }, []);
 
-  // --- Guardado automático ---
+  // --- Guardar automáticamente ---
   useEffect(() => {
     localStorage.setItem(
       "camino_diego_data",
@@ -43,10 +39,7 @@ export default function App() {
   // --- Fecha actual ---
   useEffect(() => {
     const hoy = new Date();
-    const fecha = hoy.toLocaleDateString("es-UY", {
-      day: "numeric",
-      month: "long",
-    });
+    const fecha = hoy.toISOString().split("T")[0]; // YYYY-MM-DD
     setFechaHoy(fecha);
   }, []);
 
@@ -68,6 +61,27 @@ export default function App() {
     setMensajeDiario(frases[Math.floor(Math.random() * frases.length)]);
   }, [nivelActual]);
 
+  // --- Manejar registro XP diario ---
+  const registrarXP = (valor) => {
+    const hoy = new Date().toISOString().split("T")[0];
+    setHistorial((prev) => {
+      const existe = prev.find((r) => r.fecha === hoy);
+      if (existe) {
+        return prev.map((r) =>
+          r.fecha === hoy ? { ...r, xp: r.xp + valor } : r
+        );
+      } else {
+        return [...prev, { fecha: hoy, xp: valor }];
+      }
+    });
+  };
+
+  // --- Enviar funciones a pantallas ---
+  const handleAddXP = (valor) => {
+    setPuntos((prev) => prev + valor);
+    registrarXP(valor);
+  };
+
   // --- Render de pantallas ---
   const renderPantalla = () => {
     switch (pantalla) {
@@ -75,7 +89,7 @@ export default function App() {
         return (
           <Habitos
             puntos={puntos}
-            setPuntos={setPuntos}
+            setPuntos={handleAddXP}
             onBack={() => setPantalla("home")}
           />
         );
@@ -105,14 +119,12 @@ export default function App() {
                 <span className="level">LVL {nivelActual}</span>
               </div>
               <div className="hud-subtext">puntos hoy</div>
-
               <div className="xp-bar-frame">
                 <div
                   className="xp-bar-fill"
                   style={{ width: `${xpRatio * 100}%` }}
                 ></div>
               </div>
-
               <div className="hud-subtext">70 puntos esta semana</div>
             </div>
 
@@ -158,17 +170,15 @@ export default function App() {
 
             {/* Footer */}
             <p className="footer">
-              Día {fechaHoy} — Racha: {racha} días
+              Día {fechaHoy.split("-").reverse().join("/")} — Racha: {racha} días
             </p>
 
-            {/* Partículas decorativas */}
             <Particles color={currentLevel.to} />
           </section>
         );
     }
   };
 
-  // --- Render con transición suave ---
   return (
     <TransitionView keyProp={pantalla}>
       {renderPantalla()}
