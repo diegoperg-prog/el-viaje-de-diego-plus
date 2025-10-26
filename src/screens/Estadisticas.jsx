@@ -144,4 +144,31 @@ export default function Estadisticas({ historial = [], onBack }) {
       <Card
         style={{
           width: 320,
-          margin: "0 auto",
+          margin: "0 auto 20px",
+          background: "rgba(0,0,0,0.6)",
+          color: "#E3C06E",
+        }}
+      >
+        <p style={{ fontFamily: "Cinzel", marginBottom: 6 }}>
+          🧙 Consejos del sabio
+        </p>
+        <p
+          style={{
+            fontFamily: "EB Garamond",
+            fontSize: "0.95rem",
+            lineHeight: 1.4,
+            color: "#FAE6B1",
+          }}
+        >
+          Tu hábito más fuerte es <b>{habitoFuerte}</b>.
+          <br />
+          El que menos energía recibió: <b>{habitoDebil}</b>.
+          <br />
+          Tu día más fuerte fue <b>{maxDia.fecha}</b> ({maxDia.xp} XP).
+          <br />
+          El más tranquilo: <b>{minDia.fecha}</b> ({minDia.xp} XP).
+        </p>
+      </Card>
+    </section>
+  );
+}
