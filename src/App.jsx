@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import levels from "./dino/theme/levels";
 import XPBar from "./dino/components/XPBar";
-import Button from "./dino/components/Button";
 import Particles from "./dino/components/Particles";
 import TransitionView from "./dino/components/TransitionView";
 
@@ -11,14 +10,16 @@ import Estadisticas from "./screens/Estadisticas";
 import Viaje from "./screens/Viaje";
 import Recompensa from "./screens/Recompensa";
 
+import "./App.css";
+
 // ======================================================
-// 🚀 El viaje de Diego+ — App.jsx (fondos visuales)
+// ⚔️ El viaje de Diego+ — App.jsx (estética medieval)
 // ======================================================
 export default function App() {
   // --- Estado base ---
   const [pantalla, setPantalla] = useState("home");
   const [puntos, setPuntos] = useState(0);
-  const [racha, setRacha] = useState(0);
+  const [racha, setRacha] = useState(22);
   const [fechaHoy, setFechaHoy] = useState("");
   const [mensajeDiario, setMensajeDiario] = useState("");
   const [historial, setHistorial] = useState([]);
@@ -43,7 +44,6 @@ export default function App() {
   useEffect(() => {
     const hoy = new Date();
     const fecha = hoy.toLocaleDateString("es-UY", {
-      weekday: "long",
       day: "numeric",
       month: "long",
     });
@@ -72,124 +72,58 @@ export default function App() {
   const renderPantalla = () => {
     switch (pantalla) {
       case "habitos":
-        return <Habitos puntos={puntos} setPuntos={setPuntos} />;
+        return (
+          <Habitos
+            puntos={puntos}
+            setPuntos={setPuntos}
+            onBack={() => setPantalla("home")}
+          />
+        );
       case "estadisticas":
-        return <Estadisticas historial={historial} />;
+        return (
+          <Estadisticas
+            historial={historial}
+            onBack={() => setPantalla("home")}
+          />
+        );
       case "viaje":
-        return <Viaje nivel={nivelActual} />;
+        return <Viaje nivel={nivelActual} onBack={() => setPantalla("home")} />;
       case "recompensa":
-        return <Recompensa />;
+        return <Recompensa onBack={() => setPantalla("home")} />;
       default:
         return (
           <section
+            className="app-bg"
             style={{
-              minHeight: "100vh",
-              maxWidth: 390,
-              margin: "0 auto",
-              position: "relative",
-              color: currentLevel.text || "#1C1C1E",
               backgroundImage: `url(${currentLevel.bg})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              overflow: "hidden",
-              transition: "background 1s ease-in-out",
-              textShadow: "0 1px 3px rgba(0,0,0,0.4)",
             }}
           >
-            {/* Header */}
-            <div
-              style={{
-                width: "100%",
-                textAlign: "center",
-                padding: "12px 0",
-                borderBottom: "1px solid rgba(255,255,255,0.3)",
-                background: "rgba(255,255,255,0.25)",
-                backdropFilter: "blur(8px)",
-                zIndex: 1,
-              }}
-            >
-              <div style={{ fontSize: 10, fontFamily: "Poppins, system-ui" }}>
-                LVL {nivelActual}
+            {/* HUD Superior */}
+            <div className="hud">
+              <div className="hud-points">
+                <span className="points">{puntos}</span>
+                <span className="level">LVL {nivelActual}</span>
               </div>
-              <XPBar value={xpRatio} from={currentLevel.from} to={currentLevel.to} />
+              <div className="hud-subtext">puntos hoy</div>
+
+              <div className="xp-bar-frame">
+                <div
+                  className="xp-bar-fill"
+                  style={{ width: `${xpRatio * 100}%` }}
+                ></div>
+              </div>
+
+              <div className="hud-subtext">70 puntos esta semana</div>
             </div>
 
-{/* Personaje central */}
-<div
-  style={{
-    position: "relative",
-    width: "35vw",
-    maxWidth: 180,
-    aspectRatio: "2480 / 2431",
-    backgroundImage: "url('/assets/character/hero.gif')",
-    backgroundSize: "contain",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    zIndex: 2,
-  }}
-/>
-
-            {/* Mensaje motivacional */}
-            <p
-              style={{
-                fontSize: 12,
-                fontStyle: "italic",
-                textAlign: "center",
-                margin: "0 24px 24px",
-                color: "rgba(0,0,0,0.8)",
-                textShadow: "0 1px 2px rgba(255,255,255,0.6)",
-              }}
-            >
-              {mensajeDiario}
-            </p>
-
-            {/* Botones principales */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 16,
-                width: "86%",
-                zIndex: 1,
-              }}
-            >
-              <Button onClick={() => setPantalla("habitos")}>Hábitos</Button>
-              <Button onClick={() => setPantalla("estadisticas")}>
-                Estadísticas
-              </Button>
-              <Button onClick={() => setPantalla("viaje")}>Viaje</Button>
-              <Button onClick={() => setPantalla("recompensa")}>Recompensa</Button>
+            {/* Héroe */}
+            <div className="hero">
+              <img
+                src="/assets/character/hero.gif"
+                alt="El héroe"
+                draggable="false"
+              />
+              <div className="hero-name">Diego, el Héroe</div>
             </div>
 
-            {/* Footer */}
-            <div
-              style={{
-                marginTop: "auto",
-                marginBottom: 24,
-                fontSize: 12,
-                color: "rgba(255,255,255,0.9)",
-                textShadow: "0 1px 2px rgba(0,0,0,0.4)",
-                zIndex: 1,
-              }}
-            >
-              {fechaHoy} — Racha: {racha} días
-            </div>
-
-            {/* Partículas decorativas */}
-            <Particles color={currentLevel.to} />
-          </section>
-        );
-    }
-  };
-
-  // --- Render con transición suave ---
-  return (
-    <TransitionView keyProp={pantalla}>
-      {renderPantalla()}
-    </TransitionView>
-  );
-}
+            {/* Mensa*

@@ -1,51 +1,255 @@
-:root {
-  --neutral-bg: #f2f2f7;
-  --text: #1c1c1e;
-  --border: #e5e5ea;
+/* ===========================
+   🌟 El viaje de Diego+
+   Estética medieval / RPG clásico
+   =========================== */
+
+/* --- Fuentes recomendadas --- */
+/* Importá estas fuentes en index.html o vía @import en este archivo */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond&display=swap');
+
+/* --- Reset y base --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  margin: 0;
-  background-color: var(--neutral-bg);
-  color: var(--text);
-  font-family: "Inter", system-ui, sans-serif;
+  background-color: #0C2211;
+  color: #E3C06E;
+  font-family: 'EB Garamond', serif;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.dino-glass {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+/* Fondo general del nivel */
+.app-bg {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 12px;
+  transition: background 0.8s ease-in-out;
 }
 
-/* Animación sutil */
-@keyframes dino-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.dino-appear {
-  animation: dino-fade-in 0.4s ease-out both;
+/* ===========================
+   HUD superior
+   =========================== */
+.hud {
+  color: #E3C06E;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  margin-top: 4px;
 }
 
-/* === Dark Mode automático === */
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #0e141b;
-    color: #f2f2f7;
-  }
-  .dino-glass {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  button {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: #f2f2f7;
-  }
+.hud-points {
+  font-size: 2.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px;
+  line-height: 1;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.6);
 }
+
+.hud-subtext {
+  font-size: 0.9rem;
+  color: #E3C06E;
+  text-shadow: 0 1px 2px #000;
+  margin-bottom: 4px;
+}
+
+/* Barra de experiencia */
+.xp-bar-frame {
+  width: 80%;
+  margin: 4px auto;
+  height: 14px;
+  background: #2A2019;
+  border: 3px solid #4B3A2E;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #9AC27B, #E3C06E);
+  border-radius: 4px;
+  transition: width 0.6s ease-in-out;
+}
+
+/* ===========================
+   Héroe / Personaje central
+   =========================== */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 12px;
+}
+
+.hero img {
+  width: 35vw;
+  max-width: 180px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.6));
+}
+
+.hero-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  color: #E3C06E;
+  margin-top: 6px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* ===========================
+   Mensaje / frase motivacional
+   =========================== */
+.motivacion {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #E3C06E;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  margin: 4px 16px 16px;
+}
+
+/* ===========================
+   Botones medievales
+   =========================== */
+.buttons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 80%;
+  max-width: 400px;
+  margin: 12px auto;
+}
+
+.btn-medieval {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 1rem;
+  background: #E3C06E;
+  color: #2C1C0F;
+  border: 2px solid #4B3A2E;
+  border-radius: 4px;
+  padding: 10px 0;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #4B3A2E, inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  transition: all 0.1s ease-in-out;
+}
+
+.btn-medieval:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 0 #4B3A2E, inset 0 1px 3px rgba(255, 255, 255, 0.4);
+}
+
+.btn-medieval:active {
+  transform: scale(0.97);
+}
+
+/* ===========================
+   📜 Card medieval
+   =========================== */
+.card-medieval {
+  background: #F8E7C0;
+  background: linear-gradient(180deg, #F8E7C0, #E3C06E);
+  border: 2px solid #4B3A2E;
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: #2C1C0F;
+  font-family: 'EB Garamond', serif;
+  box-shadow:
+    0 3px 0 #4B3A2E,
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
+  text-align: center;
+  transition: transform 0.1s ease;
+}
+
+.card-medieval:hover {
+  transform: scale(1.02);
+}
+
+
+/* ===========================
+   Texto inferior
+   =========================== */
+.nivel-texto {
+  font-family: 'Cinzel', serif;
+  color: #9AC27B;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.footer {
+  font-family: 'EB Garamond', serif;
+  font-size: 0.85rem;
+  color: #E3C06E;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  text-shadow: 0 1px 2px #000;
+}
+
+/* ===========================
+   Partículas suaves
+   =========================== */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  width: 2px;
+  height: 2px;
+  animation: particleFloat 6s linear infinite;
+}
+
+@keyframes particleFloat {
+  from { transform: translateY(0); opacity: 0.8; }
+  to { transform: translateY(-80vh); opacity: 0; }
+}
+
+/* ===========================
+   Responsividad
+   =========================== */
+@media (max-width: 480px) {
+  .hud-points { font-size: 2.2rem; }
+  .hero img { width: 45vw; }
+  .btn-medieval { font-size: 0.95rem; }
+  .nivel-texto { font-size: 1rem; }
+}
+/* ===========================
+   🔙 Botón de regreso
+   =========================== */
+.btn-back {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #E3C06E;
+  border: 2px solid #4B3A2E;
+  color: #2C1C0F;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 0 #4B3A2E, inset 0 1px 2px rgba(255,255,255,0.4);
+  z-index: 10;
+  transition: transform 0.1s ease;
+}
+
+.btn-back:hover {
+  transform: scale(1.05);
+}
+
+.btn-back:active {
+  transform: scale(0.95);
+}
+
