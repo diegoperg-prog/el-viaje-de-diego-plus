@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import levels from "./dino/theme/levels";
 import XPBar from "./dino/components/XPBar";
 import Button from "./dino/components/Button";
 import Particles from "./dino/components/Particles";
+import TransitionView from "./dino/components/TransitionView";
 
-// Tus pantallas separadas
+// Pantallas separadas
 import Habitos from "./screens/Habitos";
 import Estadisticas from "./screens/Estadisticas";
 import Viaje from "./screens/Viaje";
 import Recompensa from "./screens/Recompensa";
 
-// =======================================
-// El viaje de Diego+
-// App.jsx consolidado con Diño UI
-// =======================================
+// ======================================================
+// 🚀 El viaje de Diego+ — App.jsx consolidado (versión final)
+// ======================================================
 export default function App() {
   // --- Estado base ---
   const [pantalla, setPantalla] = useState("home");
@@ -23,7 +23,7 @@ export default function App() {
   const [mensajeDiario, setMensajeDiario] = useState("");
   const [historial, setHistorial] = useState([]);
 
-  // --- Carga desde localStorage ---
+  // --- Carga inicial ---
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("camino_diego_data") || "{}");
     if (stored.puntos) setPuntos(stored.puntos);
@@ -196,5 +196,10 @@ export default function App() {
     }
   };
 
-  return renderPantalla();
+  // --- Render con transición suave ---
+  return (
+    <TransitionView keyProp={pantalla}>
+      {renderPantalla()}
+    </TransitionView>
+  );
 }
