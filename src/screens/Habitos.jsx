@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import BackButton from "../dino/components/BackButton";
 import levels from "../dino/theme/levels";
 
 export default function Habitos({ puntos, setPuntos, onBack }) {
-  const currentLevel = levels[0]; // Bosque Místico (puede venir como prop)
+  const currentLevel = levels[0];
   const xpRatio = (puntos % 1000) / 1000;
 
   const habitos = [
@@ -17,8 +17,19 @@ export default function Habitos({ puntos, setPuntos, onBack }) {
     { id: 8, nombre: "Aprendí algo", puntos: 5 },
   ];
 
-  const handleClick = (valor) => {
+  const [floatingXP, setFloatingXP] = useState([]);
+
+  const handleClick = (valor, id) => {
     setPuntos((prev) => prev + valor);
+
+    // Crear efecto visual temporal sobre el botón
+    const newXP = { id: Date.now(), valor, habitId: id };
+    setFloatingXP((prev) => [...prev, newXP]);
+
+    // Removerlo luego de 1s
+    setTimeout(() => {
+      setFloatingXP((prev) => prev.filter((xp) => xp.id !== newXP.id));
+    }, 1000);
   };
 
   return (
@@ -71,34 +82,83 @@ export default function Habitos({ puntos, setPuntos, onBack }) {
           width: "80%",
           maxWidth: "400px",
           margin: "0 auto 20px",
+          position: "relative",
         }}
       >
         {habitos.map((h) => (
-          <button
-            key={h.id}
-            onClick={() => handleClick(h.puntos)}
-            style={{
-              background: "rgba(0,0,0,0.75)",
-              border: "2px solid #C9A44A",
-              borderRadius: "6px",
-              color: "#E3C06E",
-              fontFamily: "Cinzel, serif",
-              fontSize: "0.95rem",
-              padding: "10px 4px",
-              boxShadow:
-                "0 2px 4px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.15)",
-              transition: "transform 0.1s ease",
-            }}
-            onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.95)")}
-            onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1.0)")}
-          >
-            <div>{h.nombre}</div>
-            <div style={{ color: "#9AC27B", fontSize: "0.85rem" }}>
-              +{h.puntos}
-            </div>
-          </button>
+          <div key={h.id} style={{ position: "relative" }}>
+            <button
+              onClick={() => handleClick(h.puntos, h.id)}
+              style={{
+                width: "100%",
+                background: "rgba(0,0,0,0.75)",
+                border: "2px solid #C9A44A",
+                borderRadius: "6px",
+                color: "#E3C06E",
+                fontFamily: "Cinzel, serif",
+                fontSize: "0.95rem",
+                padding: "10px 4px",
+                boxShadow:
+                  "0 2px 4px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.15)",
+                transition: "transform 0.1s ease",
+              }}
+              onMouseDown={(e) =>
+                (e.currentTarget.style.transform = "scale(0.95)")
+              }
+              onMouseUp={(e) =>
+                (e.currentTarget.style.transform = "scale(1.0)")
+              }
+            >
+              <div>{h.nombre}</div>
+              <div style={{ color: "#9AC27B", fontSize: "0.85rem" }}>
+                +{h.puntos}
+              </div>
+            </button>
+
+            {/* Efecto de XP flotante */}
+            {floatingXP
+              .filter((xp) => xp.habitId === h.id)
+              .map((xp) => (
+                <div
+                  key={xp.id}
+                  className="xp-float"
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    color: "#9AC27B",
+                    fontFamily: "Cinzel, serif",
+                    fontWeight: "600",
+                    textShadow: "0 1px 3px rgba(0,0,0,0.6)",
+                    animation: "xpFloat 1s ease-out forwards",
+                    pointerEvents: "none",
+                  }}
+                >
+                  +{xp.valor} XP
+                </div>
+              ))}
+          </div>
         ))}
       </div>
+
+      {/* Animación */}
+      <style>{`
+        @keyframes xpFloat {
+          0% {
+            opacity: 0;
+            transform: translate(-50%, -30%);
+          }
+          30% {
+            opacity: 1;
+            transform: translate(-50%, -60%);
+          }
+          100% {
+            opacity: 0;
+            transform: translate(-50%, -120%);
+          }
+        }
+      `}</style>
     </section>
   );
 }
