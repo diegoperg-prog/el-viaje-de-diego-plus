@@ -12,7 +12,7 @@ import Viaje from "./screens/Viaje";
 import Recompensa from "./screens/Recompensa";
 
 // ======================================================
-// 🚀 El viaje de Diego+ — App.jsx consolidado (versión final)
+// 🚀 El viaje de Diego+ — App.jsx (fondos visuales)
 // ======================================================
 export default function App() {
   // --- Estado base ---
@@ -87,19 +87,17 @@ export default function App() {
               maxWidth: 390,
               margin: "0 auto",
               position: "relative",
-              color: "#1C1C1E",
-              background: `
-              linear-gradient(180deg, ${currentLevel.from}, ${currentLevel.to}),
-              url(${currentLevel.bg})
-            `,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
+              color: currentLevel.text || "#1C1C1E",
+              backgroundImage: `url(${currentLevel.bg})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               overflow: "hidden",
               transition: "background 1s ease-in-out",
+              textShadow: "0 1px 3px rgba(0,0,0,0.4)",
             }}
           >
             {/* Header */}
@@ -108,8 +106,8 @@ export default function App() {
                 width: "100%",
                 textAlign: "center",
                 padding: "12px 0",
-                borderBottom: "1px solid #E5E5EA",
-                background: "rgba(255,255,255,0.4)",
+                borderBottom: "1px solid rgba(255,255,255,0.3)",
+                background: "rgba(255,255,255,0.25)",
                 backdropFilter: "blur(8px)",
                 zIndex: 1,
               }}
@@ -135,9 +133,9 @@ export default function App() {
                   width: 96,
                   height: 96,
                   borderRadius: 999,
-                  background: "#ffffffc8",
-                  border: "2px solid #fff",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                  background: "rgba(255,255,255,0.6)",
+                  border: "2px solid rgba(255,255,255,0.9)",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
                 }}
               />
               <div
@@ -145,6 +143,7 @@ export default function App() {
                   marginTop: 8,
                   fontSize: 14,
                   fontFamily: "Poppins, system-ui",
+                  color: "rgba(0,0,0,0.9)",
                 }}
               >
                 Diego, el Héroe
@@ -156,9 +155,10 @@ export default function App() {
               style={{
                 fontSize: 12,
                 fontStyle: "italic",
-                color: currentLevel.text,
                 textAlign: "center",
                 margin: "0 24px 24px",
+                color: "rgba(0,0,0,0.8)",
+                textShadow: "0 1px 2px rgba(255,255,255,0.6)",
               }}
             >
               {mensajeDiario}
@@ -188,7 +188,8 @@ export default function App() {
                 marginTop: "auto",
                 marginBottom: 24,
                 fontSize: 12,
-                color: "#6E6E73",
+                color: "rgba(255,255,255,0.9)",
+                textShadow: "0 1px 2px rgba(0,0,0,0.4)",
                 zIndex: 1,
               }}
             >
