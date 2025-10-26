@@ -118,37 +118,20 @@ export default function App() {
               <XPBar value={xpRatio} from={currentLevel.from} to={currentLevel.to} />
             </div>
 
-            {/* Avatar */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                padding: "24px 0",
-                zIndex: 1,
-              }}
-            >
-              <div
-                style={{
-                  width: 96,
-                  height: 96,
-                  borderRadius: 999,
-                  background: "rgba(255,255,255,0.6)",
-                  border: "2px solid rgba(255,255,255,0.9)",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.25)",
-                }}
-              />
-              <div
-                style={{
-                  marginTop: 8,
-                  fontSize: 14,
-                  fontFamily: "Poppins, system-ui",
-                  color: "rgba(0,0,0,0.9)",
-                }}
-              >
-                Diego, el Héroe
-              </div>
-            </div>
+{/* Personaje central */}
+<div
+  style={{
+    position: "relative",
+    width: "70vw",
+    maxWidth: 360,
+    aspectRatio: "2480 / 2431",
+    backgroundImage: "url('/assets/character/hero.gif')",
+    backgroundSize: "contain",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    zIndex: 2,
+  }}
+/>
 
             {/* Mensaje motivacional */}
             <p
