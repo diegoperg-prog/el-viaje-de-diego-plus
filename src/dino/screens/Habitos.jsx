@@ -14,7 +14,22 @@ export default function Habitos({ puntos, setPuntos, onBack }) {
     { id: 5, nombre: "Meditar", puntos: 5 },
   ];
 
-  const handleClick = (valor) => setPuntos((prev) => prev + valor);
+  const handleClick = (valor, id, nombre) => {
+  setPuntos((prev) => prev + valor);
+  // Efecto XP flotante (igual que antes)
+  const newXP = { id: Date.now(), valor, habitId: id };
+  setFloatingXP((prev) => [...prev, newXP]);
+  setTimeout(() => {
+    setFloatingXP((prev) => prev.filter((xp) => xp.id !== newXP.id));
+  }, 1000);
+
+  // 🔹 Registrar hábito completado
+  const hoy = new Date().toISOString().split("T")[0];
+  const registros = JSON.parse(localStorage.getItem("habitos_registrados") || "[]");
+  registros.push({ fecha: hoy, nombre, xp: valor });
+  localStorage.setItem("habitos_registrados", JSON.stringify(registros));
+};
+
 
   return (
     <section
