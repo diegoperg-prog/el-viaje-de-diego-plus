@@ -126,4 +126,52 @@ export default function App() {
               <div className="hero-name">Diego, el Héroe</div>
             </div>
 
-            {/* Mensa*
+            {/* Mensaje motivacional */}
+            <p className="motivacion">{mensajeDiario}</p>
+
+            {/* Botones principales */}
+            <div className="buttons-grid">
+              <button className="btn-medieval" onClick={() => setPantalla("habitos")}>
+                Hábitos
+              </button>
+              <button
+                className="btn-medieval"
+                onClick={() => setPantalla("estadisticas")}
+              >
+                Estadísticas
+              </button>
+              <button className="btn-medieval" onClick={() => setPantalla("viaje")}>
+                Viaje
+              </button>
+              <button
+                className="btn-medieval"
+                onClick={() => setPantalla("recompensa")}
+              >
+                Recompensa
+              </button>
+            </div>
+
+            {/* Nivel actual */}
+            <div className="nivel-texto">
+              Nivel {nivelActual}: {currentLevel.name}
+            </div>
+
+            {/* Footer */}
+            <p className="footer">
+              Día {fechaHoy} — Racha: {racha} días
+            </p>
+
+            {/* Partículas decorativas */}
+            <Particles color={currentLevel.to} />
+          </section>
+        );
+    }
+  };
+
+  // --- Render con transición suave ---
+  return (
+    <TransitionView keyProp={pantalla}>
+      {renderPantalla()}
+    </TransitionView>
+  );
+}
