@@ -42,5 +42,5 @@ const levels = [
     text: "#A27B00",
   },
 ];
-export default levels;
 
+export default levels;
