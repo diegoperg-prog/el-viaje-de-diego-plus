@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import BackButton from "../dino/components/BackButton";
 import Card from "../dino/components/Card";
 import Button from "../dino/components/Button";
+import levels from "../dino/theme/levels";
 
-export default function Recompensa() {
+export default function Recompensa({ onBack }) {
   const [recompensa, setRecompensa] = useState(
     localStorage.getItem("recompensa") || ""
   );
+  const currentLevel = levels[0];
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -15,19 +18,17 @@ export default function Recompensa() {
 
   return (
     <section
+      className="app-bg"
       style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 24,
-        textAlign: "center",
+        backgroundImage: `url(${currentLevel.bg})`,
       }}
     >
-      <h2 style={{ fontFamily: "Poppins", fontSize: 20 }}>Tu recompensa 🎯</h2>
+      <BackButton onClick={onBack} />
+      <h2 style={{ fontFamily: "Cinzel", color: "#E3C06E", margin: "60px 0 16px" }}>
+        Tu recompensa 🎯
+      </h2>
 
-      <Card style={{ width: 300 }}>
+      <Card style={{ width: 300, textAlign: "center" }}>
         <textarea
           placeholder="Escribí tu recompensa..."
           value={recompensa}
@@ -37,8 +38,10 @@ export default function Recompensa() {
             width: "100%",
             padding: 8,
             borderRadius: 8,
-            border: "1px solid #E5E5EA",
-            fontFamily: "Inter",
+            border: "1px solid #E3C06E",
+            background: "rgba(0,0,0,0.3)",
+            color: "#E3C06E",
+            fontFamily: "EB Garamond",
             resize: "none",
           }}
         />
@@ -46,7 +49,7 @@ export default function Recompensa() {
       </Card>
 
       {recompensa && (
-        <p style={{ fontSize: 14, color: "#3E7C59" }}>
+        <p style={{ fontSize: 14, color: "#9AC27B", marginTop: 12 }}>
           Recompensa actual: {recompensa}
         </p>
       )}
