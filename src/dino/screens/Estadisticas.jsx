@@ -27,6 +27,7 @@ export default function Estadisticas({ historial = [], onBack }) {
           xp: d.xp,
         }));
     }
+    // Datos de ejemplo si aún no hay historial
     return [
       { fecha: "Lun", xp: 30 },
       { fecha: "Mar", xp: 45 },
@@ -38,6 +39,7 @@ export default function Estadisticas({ historial = [], onBack }) {
     ];
   }, [historial]);
 
+  // --- Totales e información derivada ---
   const totalXP = data.reduce((acc, d) => acc + d.xp, 0);
   const promedio = (totalXP / data.length).toFixed(1);
   const maxDia = data.reduce((a, b) => (a.xp > b.xp ? a : b), data[0]);
