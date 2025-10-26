@@ -89,12 +89,12 @@ export default function App() {
               position: "relative",
               color: "#1C1C1E",
               background: `
-  linear-gradient(180deg, ${currentLevel.from}, ${currentLevel.to}),
-  url(${currentLevel.bg})
-`,
-backgroundSize: "cover",
-backgroundPosition: "center",
-backgroundRepeat: "no-repeat",
+              linear-gradient(180deg, ${currentLevel.from}, ${currentLevel.to}),
+              url(${currentLevel.bg})
+            `,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
