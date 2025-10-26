@@ -5,6 +5,7 @@ const levels = [
     from: "#3E7C59",
     to: "#F2F2F7",
     text: "#3E7C59",
+    bg: "/assets/backgrounds/bg_bosque.png",
   },
   {
     id: 2,
@@ -12,6 +13,7 @@ const levels = [
     from: "#E6B450",
     to: "#FFF5E1",
     text: "#B86E00",
+    bg: "/assets/backgrounds/bg_aldea.png",
   },
   {
     id: 3,
@@ -19,6 +21,7 @@ const levels = [
     from: "#5A6B8C",
     to: "#E6EBF4",
     text: "#3C4A64",
+    bg: "/assets/backgrounds/bg_montanas.png",
   },
   {
     id: 4,
@@ -26,6 +29,7 @@ const levels = [
     from: "#4C3A6E",
     to: "#E8E4F2",
     text: "#2F2451",
+    bg: "/assets/backgrounds/bg_cueva.png",
   },
   {
     id: 5,
@@ -33,6 +37,7 @@ const levels = [
     from: "#3A6FE6",
     to: "#DDE8FF",
     text: "#2C4CA8",
+    bg: "/assets/backgrounds/bg_castillo.png",
   },
   {
     id: 6,
@@ -40,6 +45,7 @@ const levels = [
     from: "#F6D673",
     to: "#FFF9E6",
     text: "#A27B00",
+    bg: "/assets/backgrounds/bg_santuario.png",
   },
 ];
 
